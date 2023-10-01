@@ -1,7 +1,15 @@
-# This file should contain all the record creation needed to seed the database with its default values.
-# The data can then be loaded with the bin/rails db:seed command (or created alongside the database with db:setup).
-#
-# Examples:
-#
-#   movies = Movie.create([{ name: "Star Wars" }, { name: "Lord of the Rings" }])
-#   Character.create(name: "Luke", movie: movies.first)
+Question.create!(
+  [
+    { title: 'Тип данных, которого нет в Ruby',
+      body: 'body body body 1' },
+    { title: 'Тип данных, которого нет в Javascript',
+      body: 'body body body 2' },
+    { title: 'Тип данных, которого нет в Go',
+      body: 'body body body 3' },
+    { title: 'Тип данных, которого нет в Java',
+      body: 'body body body 4' },
+    { title: 'Тип данных, которого нет в C#',
+      body: 'body body body 5' }
+
+  ]
+)
