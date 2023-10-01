@@ -33,6 +33,9 @@ gem 'rubocop'
 # views
 gem 'slim-rails'
 
+# auth
+gem 'devise'
+
 # Use Redis adapter to run Action Cable in production
 # gem "redis", "~> 4.0"
 
@@ -59,6 +62,7 @@ group :development, :test do
   gem 'debug', platforms: %i[mri mingw x64_mingw]
   gem 'factory_bot_rails'
   gem 'rspec-rails', '~> 6.0.0'
+  gem 'rubocop-rspec', require: false
 end
 
 group :development do
@@ -74,6 +78,8 @@ end
 
 group :test do
   # Use system testing [https://guides.rubyonrails.org/testing.html#system-testing]
+  gem 'capybara'
+  gem 'launchy'
   gem 'rails-controller-testing'
   gem 'shoulda-matchers', '~> 5.0'
 end
