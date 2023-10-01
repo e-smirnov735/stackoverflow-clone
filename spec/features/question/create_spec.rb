@@ -32,7 +32,7 @@ describe 'User can create question', "
     end
   end
 
-  scenario 'Unauthenticated user tries to ask a question' do
+  it 'Unauthenticated user tries to ask a question' do
     visit questions_path
     click_on 'Ask question'
 
