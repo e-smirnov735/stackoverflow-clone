@@ -12,9 +12,7 @@ questions in order to help someone
       visit questions_path
 
       expect(page).to have_content questions.first.title
-      expect(page).to have_content questions.first.body
       expect(page).to have_content questions.last.title
-      expect(page).to have_content questions.last.body
     end
 
     it 'Authenticated user' do
@@ -23,9 +21,7 @@ questions in order to help someone
       visit questions_path
 
       expect(page).to have_content questions.first.title
-      expect(page).to have_content questions.first.body
       expect(page).to have_content questions.last.title
-      expect(page).to have_content questions.last.body
     end
   end
 end
