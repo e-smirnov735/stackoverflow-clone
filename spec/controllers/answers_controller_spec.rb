@@ -3,6 +3,7 @@ require 'rails_helper'
 RSpec.describe AnswersController, type: :controller do
   let(:question) { create(:question) }
   let(:answer) { create(:answer, question:) }
+  let(:user) { create(:user) }
 
   describe 'GET #show' do
     before { get :show, params: { question_id: question, id: answer } }
@@ -18,6 +19,8 @@ RSpec.describe AnswersController, type: :controller do
 
   describe 'GET #new' do
     before do
+      login(user)
+
       get :new, params: {
         question_id: question,
         answer: attributes_for(:answer)
@@ -34,6 +37,8 @@ RSpec.describe AnswersController, type: :controller do
   end
 
   describe 'POST #create' do
+    before { login(user) }
+
     context 'with valid attributes' do
       it 'saves a new answer in the database' do
         expect do
@@ -62,7 +67,7 @@ RSpec.describe AnswersController, type: :controller do
             answer: attributes_for(:answer, :invalid)
           }
         end
-          .to_not change(question.answers, :count)
+          .not_to change(question.answers, :count)
       end
 
       it 're-render new view' do

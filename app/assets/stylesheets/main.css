@@ -31,8 +31,16 @@ main {
 }
 
 .answer {
-  padding: 10px;
-  width: 600px;
+  padding: 0 5px;
   margin-bottom: 5px;
-  border-bottom: 1px solid black;
+  border: 1px solid black;
+}
+
+.answer__form {
+}
+
+.answer__form-body {
+  width: 80%;
+  min-height: 100px;
+  margin: 10px;
 }
