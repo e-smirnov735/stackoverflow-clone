@@ -3,9 +3,36 @@ body {
   padding: 0;
 }
 
-
 *,
 ::before,
 ::after {
   box-sizing: border-box;
+}
+
+a {
+  all: unset;
+  cursor: pointer;
+}
+
+main {
+  display: flex;
+  justify-content: center;
+  color: black;
+}
+
+.app {
+  width: 800px;
+}
+
+.question {
+  padding: 10px;
+  margin-bottom: 5px;
+  border: 1px solid blueviolet;
+}
+
+.answer {
+  padding: 10px;
+  width: 600px;
+  margin-bottom: 5px;
+  border-bottom: 1px solid black;
 }
