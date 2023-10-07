@@ -1,10 +1,9 @@
 class AnswersController < ApplicationController
-  before_action :authenticate_user!, except: %i[index show]
-  before_action :set_question, only: %i[show new create inline_create]
+  before_action :authenticate_user!, except: %i[index show destroy]
+  before_action :set_question, only: %i[new create]
+  before_action :set_answer, only: %i[show destroy]
 
-  def show
-    @answer = @question.answers.find(params[:id])
-  end
+  def show; end
 
   def new
     @answer = @question.answers.new
@@ -14,29 +13,30 @@ class AnswersController < ApplicationController
     @answer = @question.answers.new(answer_param)
 
     if @answer.save
-      redirect_to @answer
+      redirect_to question_path(@question), notice: 'Your answer successfuly created.'
     else
-      render :new
+      redirect_to question_path(@question), notice: 'NOT CREATE'
     end
   end
 
-  def inline_create
-    @answer = @question.answers.new(answer_param)
+  def destroy
+    question = @answer.question
+    @answer.destroy
 
-    if @answer.save
-      redirect_to @question, notice: 'Your answer successfuly created.'
-    else
-      render_to @question, alert: 'NOT CREATE'
-    end
+    redirect_to question_path(question), notice: 'The answer was successfully deleted'
   end
 
   private
 
   def answer_param
-    params.require(:answer).permit(:body)
+    params.require(:answer).permit(:body, :user_id)
   end
 
   def set_question
     @question = Question.find(params[:question_id])
+  end
+
+  def set_answer
+    @answer = Answer.find(params[:id])
   end
 end

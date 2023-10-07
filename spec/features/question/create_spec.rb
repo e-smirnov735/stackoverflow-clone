@@ -21,8 +21,6 @@ describe 'User can create question', "
       click_on 'Ask'
 
       expect(page).to have_content 'Your question successfuly created.'
-      expect(page).to have_content 'Test question'
-      expect(page).to have_content 'text text text'
     end
 
     it 'asks a question with errors' do

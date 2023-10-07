@@ -44,18 +44,18 @@ RSpec.describe AnswersController, type: :controller do
         expect do
           post :create, params: {
             question_id: question,
-            answer: attributes_for(:answer)
+            answer: attributes_for(:answer, user_id: user)
           }
         end
-          .to change(question.answers, :count).by(1)
+          .to change(Answer, :count).by(1)
       end
 
       it 'redirect to show view' do
         post :create, params: {
           question_id: question,
-          answer: attributes_for(:answer)
+          answer: attributes_for(:answer, user_id: user)
         }
-        expect(response).to redirect_to(assigns(:answer))
+        expect(response).to redirect_to question_path(question)
       end
     end
 
@@ -76,8 +76,25 @@ RSpec.describe AnswersController, type: :controller do
           answer: attributes_for(:answer, :invalid)
         }
 
-        expect(response).to render_template :new
+        expect(response).to redirect_to(assigns(:question))
       end
+    end
+  end
+
+  describe 'GET #delete' do
+    before { login(user) }
+
+    let!(:question) { create(:question, user:) }
+    let!(:answer) { create(:answer, question:) }
+
+    it 'deletes the question' do
+      expect { delete :destroy, params: { id: answer } }.to change(Answer, :count).by(-1)
+    end
+
+    it 'redirects to index' do
+      delete :destroy, params: { id: answer }
+
+      expect(response).to redirect_to question_path(question)
     end
   end
 end

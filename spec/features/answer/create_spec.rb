@@ -5,7 +5,7 @@ describe 'User can create answer for question', "
   I'd like to be able to create a answer for current question
 " do
   let(:user) { create(:user) }
-  let(:question) { create(:question) }
+  let(:question) { create(:question, user:) }
 
   describe 'Authenticated user' do
     before do
