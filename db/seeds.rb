@@ -1,4 +1,7 @@
-question = Question.create!(
+author = User.create!(email: 'author@mail.ru', password: '12345678')
+user = User.create!(email: 'user@mail.ru', password: '12345678')
+
+questions = author.questions.create!(
   [
     { title: 'Тип данных, которого нет в Ruby',
       body: 'body body body 1' },
@@ -14,7 +17,7 @@ question = Question.create!(
   ]
 )
 
-question.first.answers.create!(
+questions.first.answers.create!(
   [
     {
       body: 'Answer 1'

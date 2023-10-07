@@ -1,6 +1,7 @@
 p Your Answer
-= form_with model: [ @question, @answer ], class: 'answer__form'  do |f|
-  = render 'shared/errors', resource: @answer
+= form_with model: [ question, answer ], class: 'answer__form'  do |f|
+  = render 'shared/errors', resource: answer
+  = f.hidden_field :user_id, value: current_user&.id
   = f.label :body
   br
   = f.text_area :body, class: 'answer__form-body'
