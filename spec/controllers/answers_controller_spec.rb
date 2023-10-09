@@ -47,7 +47,7 @@ RSpec.describe AnswersController, type: :controller do
             answer: attributes_for(:answer, user_id: user)
           }
         end
-          .to change(Answer, :count).by(1)
+          .to change(question.answers, :count).by(1)
       end
 
       it 'redirect to show view' do
@@ -55,7 +55,7 @@ RSpec.describe AnswersController, type: :controller do
           question_id: question,
           answer: attributes_for(:answer, user_id: user)
         }
-        expect(response).to redirect_to question_path(question)
+        expect(response).to redirect_to question
       end
     end
 

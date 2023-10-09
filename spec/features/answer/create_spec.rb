@@ -14,12 +14,20 @@ describe 'User can create answer for question', "
       visit question_path(question)
     end
 
-    it 'asks an answer' do
+    it 'asks an answer', js: true do
       fill_in 'Body', with: 'My answer'
       click_on 'Post Your Answer'
 
       expect(page).to have_content 'Your answer successfuly created.'
-      expect(page).to have_content 'My answer'
+      within '.answers' do
+        expect(page).to have_content 'My answer'
+      end
+    end
+
+    it 'create answer with errors', js: true do
+      click_on 'Post Your Answer'
+
+      expect(page).to have_content "Body can't be blank"
     end
   end
 

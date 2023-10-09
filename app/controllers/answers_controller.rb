@@ -15,7 +15,8 @@ class AnswersController < ApplicationController
     if @answer.save
       redirect_to question_path(@question), notice: 'Your answer successfuly created.'
     else
-      redirect_to question_path(@question), notice: 'An error occurred when creating a question'
+      render format: :js
+      # redirect_to question_path(@question), notice: 'An error occurred when creating a question'
     end
   end
 
