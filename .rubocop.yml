@@ -1,0 +1,25 @@
+inherit_from:
+  - ".rubocop-rspec.yml"
+
+require:
+  - rubocop-rspec
+
+AllCops:
+  Exclude:
+    - "**/db/migrate/*"
+    - "**/Gemfile.lock"
+    - "**/Rakefile"
+    - "**/rails"
+    - "**/vendor/**/*"
+    - "**/spec_helper.rb"
+    - "node_modules/**/*"
+    - "bin/*"
+
+Style/FrozenStringLiteralComment:
+  Enabled: false
+
+Style/Documentation:
+  Enabled: false
+
+Metrics/BlockLength:
+  Enabled: false
