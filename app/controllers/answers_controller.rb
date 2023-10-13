@@ -10,12 +10,13 @@ class AnswersController < ApplicationController
   end
 
   def create
-    @answer = @question.answers.new(answer_param)
+    @answer = @question.answers.new(answer_params)
 
     if @answer.save
-      redirect_to question_path(@question), notice: 'Your answer successfuly created.'
+      redirect_to @question, notice: 'Your answer successfuly created.'
     else
-      redirect_to question_path(@question), notice: 'An error occurred when creating a question'
+      @answer.destroy
+      render 'questions/show'
     end
   end
 
@@ -28,7 +29,7 @@ class AnswersController < ApplicationController
 
   private
 
-  def answer_param
+  def answer_params
     params.require(:answer).permit(:body, :user_id)
   end
 

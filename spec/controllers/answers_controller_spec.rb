@@ -76,7 +76,7 @@ RSpec.describe AnswersController, type: :controller do
           answer: attributes_for(:answer, :invalid)
         }
 
-        expect(response).to redirect_to(assigns(:question))
+        expect(response).to render_template 'questions/show'
       end
     end
   end

@@ -6,4 +6,13 @@ p = @question.body
 .answers
   = render @question.answers
 
-= render 'answers/form', question: @question, answer: @answer
+p Your Answer
+div
+  = render 'shared/errors', resource: @answer
+
+= form_with model: [ @question, @answer], local: false do |f|
+  = f.hidden_field :user_id, value: current_user&.id
+  div
+    = f.label :body
+    = f.text_area :body, class: 'form-control'
+  = f.submit 'Post Your Answer', class: 'btn btn-primary'
