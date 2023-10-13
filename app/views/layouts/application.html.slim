@@ -9,10 +9,10 @@ html
     = javascript_pack_tag "application", "data-turbo-track": "reload", defer: true
 
   body
-    header
-      = render 'shared/header'
-    main
-      .app
-        p class="notice" = notice
-        p class="alert" = alert
+    .container
+      header
+        = render 'shared/header'
+      main
+        p class="alert alert-primary" = notice
+        p class="alert alert-primary" = alert
         == yield

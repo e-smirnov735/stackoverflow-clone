@@ -15,7 +15,7 @@ class QuestionsController < ApplicationController
   end
 
   def create
-    @question = Question.new(question_param)
+    @question = Question.new(question_params)
     @question.user_id = current_user.id
 
     if @question.save
@@ -33,7 +33,7 @@ class QuestionsController < ApplicationController
 
   private
 
-  def question_param
+  def question_params
     params.require(:question).permit(:title, :body)
   end
 

@@ -1,12 +1,12 @@
 h3 Ask a public question
 
-= form_with model: @question do |f|
-  = render 'shared/errors', resource: @question
-  = f.label :title
-  = f.text_field :title
+= render 'shared/errors', resource: @question
+= form_with model: @question, local: true do |f|
+  .form-group
+    = f.label :title
+    = f.text_field :title, class: 'form-control'
+  .form-group
+    = f.label :body
+    = f.text_area :body, class: 'form-control'
   br
-  br
-  = f.label :body
-  = f.text_area :body
-  br
-  = f.submit 'Ask'
+  = f.submit 'Ask', class: 'btn btn-primary'
