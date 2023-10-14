@@ -7,8 +7,8 @@ p = @question.body
   = render @question.answers
 
 p Your Answer
-div
-  = render 'shared/errors', resource: @answer
+
+.answer-errors
 
 = form_with model: [ @question, @answer], local: false do |f|
   = f.hidden_field :user_id, value: current_user&.id

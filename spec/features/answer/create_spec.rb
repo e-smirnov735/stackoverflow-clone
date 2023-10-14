@@ -15,12 +15,11 @@ describe 'User can create answer for question', "
     end
 
     it 'asks an answer', js: true do
-      fill_in 'Body', with: 'My answer'
+      fill_in 'Body', with: 'My answer TEST'
       click_on 'Post Your Answer'
 
-      expect(page).to have_content 'Your answer successfuly created.'
       within '.answers' do
-        expect(page).to have_content 'My answer'
+        expect(page).to have_content 'My answer TEST'
       end
     end
 

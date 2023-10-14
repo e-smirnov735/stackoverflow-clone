@@ -43,19 +43,21 @@ RSpec.describe AnswersController, type: :controller do
       it 'saves a new answer in the database' do
         expect do
           post :create, params: {
-            question_id: question,
-            answer: attributes_for(:answer, user_id: user)
-          }
+                          question_id: question,
+                          answer: attributes_for(:answer, user_id: user)
+                        },
+                        format: :js
         end
           .to change(question.answers, :count).by(1)
       end
 
       it 'redirect to show view' do
         post :create, params: {
-          question_id: question,
-          answer: attributes_for(:answer, user_id: user)
-        }
-        expect(response).to redirect_to question
+                        question_id: question,
+                        answer: attributes_for(:answer, user_id: user)
+                      },
+                      format: :js
+        expect(response).to render_template :create
       end
     end
 
@@ -63,20 +65,22 @@ RSpec.describe AnswersController, type: :controller do
       it 'does not save the answer' do
         expect do
           post :create, params: {
-            question_id: question,
-            answer: attributes_for(:answer, :invalid)
-          }
+                          question_id: question,
+                          answer: attributes_for(:answer, :invalid)
+                        },
+                        format: :js
         end
           .not_to change(question.answers, :count)
       end
 
-      it 're-render new view' do
+      it 'renders question show view' do
         post :create, params: {
-          question_id: question,
-          answer: attributes_for(:answer, :invalid)
-        }
+                        question_id: question,
+                        answer: attributes_for(:answer, :invalid)
+                      },
+                      format: :js
 
-        expect(response).to render_template 'questions/show'
+        expect(response).to render_template :create
       end
     end
   end
