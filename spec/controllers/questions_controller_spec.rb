@@ -97,4 +97,46 @@ RSpec.describe(QuestionsController, type: :controller) do
       expect(response).to redirect_to questions_path
     end
   end
+
+  describe 'PATCH #update' do
+    before do
+      login(user)
+    end
+
+    context 'with valid attributes' do
+      it 'assign the requested question to @question' do
+        patch :update, params: { id: question, question: attributes_for(:question) }
+        expect(assigns(:question)).to eq question
+      end
+
+      it 'changes question to updated question' do
+        patch :update, params: { id: question, question: { title: 'new title', body: 'new body' } }
+        question.reload
+        expect(question.title).to eq 'new title'
+        expect(question.body).to eq 'new body'
+      end
+
+      it 'redirects to updated question' do
+        patch :update, params: { id: question, question: attributes_for(:question) }
+        expect(response).to redirect_to question
+      end
+    end
+
+    context 'with invalid attributes' do
+      let(:question) { create(:question, :freeze) }
+
+      before { patch :update, params: { id: question, question: attributes_for(:question, :invalid) } }
+
+      it 'does not change question' do
+        question.reload
+
+        expect(question.title).to eq 'MyTitle'
+        expect(question.body).to eq 'MyBody'
+      end
+
+      it 're-renders edit view' do
+        expect(response).to render_template :edit
+      end
+    end
+  end
 end
