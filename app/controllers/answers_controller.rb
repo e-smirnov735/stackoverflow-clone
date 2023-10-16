@@ -1,7 +1,7 @@
 class AnswersController < ApplicationController
-  before_action :authenticate_user!, except: %i[index show destroy]
+  before_action :authenticate_user!, except: %i[index show destroy update]
   before_action :set_question, only: %i[new create]
-  before_action :set_answer, only: %i[show destroy]
+  before_action :set_answer, only: %i[show destroy update]
 
   def show; end
 
@@ -11,6 +11,11 @@ class AnswersController < ApplicationController
 
   def create
     @answer = @question.answers.create(answer_params)
+  end
+
+  def update
+    @answer.update(answer_params)
+    @question = @answer.question
   end
 
   def destroy
