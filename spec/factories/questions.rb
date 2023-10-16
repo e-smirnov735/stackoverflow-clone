@@ -11,5 +11,10 @@ FactoryBot.define do
       title { nil }
       body { nil }
     end
+
+    trait :freeze do
+      title { 'MyTitle' }
+      body { 'MyBody' }
+    end
   end
 end
