@@ -1,7 +1,7 @@
 p Your Answer
 
 = render 'shared/errors', resource: answer
-= form_with model: [ question, answer ], local: true do |f|
+= form_with model: [ question, answer ], local: false do |f|
   = f.hidden_field :user_id, value: current_user&.id
   .form-group
     = f.label :body

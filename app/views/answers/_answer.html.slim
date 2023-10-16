@@ -1,5 +1,16 @@
 - if answer.persisted?
   .answer
     p = answer.body
-    - if answer.user_id.eql?(current_user&.id)
-      = button_to 'Delete Answer', answer_path(answer), method: :delete
+    div[class= "answer-errors-#{answer&.id}"]
+    .answer_form
+      = form_with model: answer, class: 'hidden', html: {id: "edit-answer-#{answer.id}"}, local: false do |f|
+        = f.label :body, 'Your answer'
+        br
+        = f.text_area :body
+        br
+        = f.submit 'Save'
+
+    .answer_actions
+      - if answer.user_id.eql?(current_user&.id)
+        = link_to 'Edit', '#', class: 'edit-answer-link', data: {answer_id: answer.id}
+        = button_to 'Delete Answer', answer_path(answer), method: :delete
