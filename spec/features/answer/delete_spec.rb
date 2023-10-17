@@ -9,14 +9,17 @@ I can only delete my answers
     let(:author_question) { create(:question, user: author) }
     let!(:author_answer) { create(:answer, question: author_question, user: author) }
 
-    context 'User is author' do
+    context 'User is author', js: true do
       before { sign_in(author) }
 
       it 'author tries deleted your answer' do
         visit question_path(author_question)
 
         click_on 'Delete Answer'
-        expect(page).to have_content 'The answer was successfully deleted'
+
+        within '.answers' do
+          expect(page).not_to have_content author_answer.body
+        end
       end
     end
 

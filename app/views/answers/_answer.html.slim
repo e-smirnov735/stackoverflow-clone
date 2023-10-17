@@ -13,4 +13,4 @@
     .answer_actions
       - if answer.user_id.eql?(current_user&.id)
         = link_to 'Edit', '#', class: 'edit-answer-link', data: {answer_id: answer.id}
-        = button_to 'Delete Answer', answer_path(answer), method: :delete
+        = button_to 'Delete Answer', answer_path(answer), remote: true, method: :delete
