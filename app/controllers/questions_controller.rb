@@ -1,6 +1,7 @@
 class QuestionsController < ApplicationController
   before_action :authenticate_user!, except: %i[index show]
-  before_action :set_question, only: %i[show destroy update edit]
+  before_action :set_question, only: %i[show destroy update edit update_best_answer]
+  before_action :user_author?, only: %i[destroy update edit update_best_answer]
 
   def index
     @questions = Question.all
@@ -35,6 +36,10 @@ class QuestionsController < ApplicationController
     end
   end
 
+  def update_best_answer
+    @question.update(question_params)
+  end
+
   def destroy
     @question.destroy
 
@@ -43,8 +48,12 @@ class QuestionsController < ApplicationController
 
   private
 
+  def user_author?
+    redirect_to @question, alert: 'forbidden action' unless @question.author?(current_user)
+  end
+
   def question_params
-    params.require(:question).permit(:title, :body)
+    params.require(:question).permit(:title, :body, :best_answer_id)
   end
 
   def set_question

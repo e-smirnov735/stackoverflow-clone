@@ -1,8 +1,8 @@
 require 'rails_helper'
 
 RSpec.describe(QuestionsController, type: :controller) do
-  let(:question) { create(:question) }
   let(:user) { create(:user) }
+  let(:question) { create(:question, user:) }
 
   describe 'GET #index' do
     let(:questions) { create_list(:question, 3) }
@@ -123,7 +123,7 @@ RSpec.describe(QuestionsController, type: :controller) do
     end
 
     context 'with invalid attributes' do
-      let(:question) { create(:question, :freeze) }
+      let(:question) { create(:question, :freeze, user:) }
 
       before { patch :update, params: { id: question, question: attributes_for(:question, :invalid) } }
 
@@ -136,6 +136,44 @@ RSpec.describe(QuestionsController, type: :controller) do
 
       it 're-renders edit view' do
         expect(response).to render_template :edit
+      end
+    end
+  end
+
+  describe 'PATCH #update_best_answer' do
+    let!(:answer) { create(:answer, question:) }
+
+    context 'user is author' do
+      before do
+        login(user)
+        patch :update_best_answer, params: { id: question, question: { best_answer_id: answer.id } }, format: :js
+      end
+
+      it 'assign the requested question to @question' do
+        expect(assigns(:question)).to eq question
+      end
+
+      it 'changes question to updated question' do
+        question.reload
+        expect(question.best_answer_id).to eq answer.id
+      end
+
+      it "render to updated question's asnwers" do
+        expect(response).to render_template :update_best_answer
+      end
+    end
+
+    context 'user is not author' do
+      let!(:not_author) { create(:user) }
+
+      before do
+        sign_in(not_author)
+        patch :update_best_answer, params: { id: question, question: { best_answer_id: answer.id } }, format: :js
+      end
+
+      it 'changes question to updated question' do
+        question.reload
+        expect(question.best_answer_id).not_to eq answer.id
       end
     end
   end
