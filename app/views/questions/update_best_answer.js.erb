@@ -1,0 +1,6 @@
+document.querySelector(".answer-errors").innerHTML =
+  "<%= render 'shared/errors', resource: @answer %>";
+
+document
+  .querySelector(".answers").innerHTML =
+  "<%= j render @question.answers %>";
