@@ -16,6 +16,6 @@
       - if answer.author?(current_user)
         = link_to 'Edit', '#', class: 'edit-answer-link', data: {answer_id: answer.id}
         = button_to 'Delete Answer', answer_path(answer), remote: true, method: :delete
-      - if answer.question.user_id.eql?(current_user&.id)
+      - if answer.question.author?(current_user)
          = button_to 'Set best',  update_favorite_answer_path(answer),
             remote: true, method: :patch, class: "best-answer-btn"
