@@ -2,10 +2,11 @@ require 'rails_helper'
 
 RSpec.describe(QuestionsController, type: :controller) do
   let(:user) { create(:user) }
+  let(:not_author) { create(:user) }
   let(:question) { create(:question, user:) }
 
   describe 'GET #index' do
-    let(:questions) { create_list(:question, 3) }
+    let!(:questions) { create_list(:question, 3, user:) }
 
     before { get :index }
 
@@ -83,25 +84,35 @@ RSpec.describe(QuestionsController, type: :controller) do
   end
 
   describe 'GET #delete' do
-    before { login(user) }
+    describe 'user is author' do
+      let!(:question) { create(:question, user:) }
 
-    let!(:question) { create(:question, user:) }
+      before { login(user) }
 
-    it 'deletes the question' do
-      expect { delete :destroy, params: { id: question } }.to change(Question, :count).by(-1)
+      it 'deletes the question' do
+        expect { delete :destroy, params: { id: question } }.to change(Question, :count).by(-1)
+      end
+
+      it 'redirects to index' do
+        delete :destroy, params: { id: question }
+
+        expect(response).to redirect_to questions_path
+      end
     end
 
-    it 'redirects to index' do
-      delete :destroy, params: { id: question }
+    describe 'user is not author' do
+      let!(:question) { create(:question, user:) }
 
-      expect(response).to redirect_to questions_path
+      before { login(not_author) }
+
+      it 'deletes the question' do
+        expect { delete :destroy, params: { id: question } }.not_to change(Question, :count)
+      end
     end
   end
 
   describe 'PATCH #update' do
-    before do
-      login(user)
-    end
+    before { login(user) }
 
     context 'with valid attributes' do
       it 'assign the requested question to @question' do
@@ -138,42 +149,14 @@ RSpec.describe(QuestionsController, type: :controller) do
         expect(response).to render_template :edit
       end
     end
-  end
 
-  describe 'PATCH #update_best_answer' do
-    let!(:answer) { create(:answer, question:) }
-
-    context 'user is author' do
-      before do
-        login(user)
-        patch :update_best_answer, params: { id: question, question: { best_answer_id: answer.id } }, format: :js
-      end
-
-      it 'assign the requested question to @question' do
-        expect(assigns(:question)).to eq question
-      end
-
+    describe 'user is not author' do
       it 'changes question to updated question' do
+        patch :update, params: { id: question, question: { title: 'new title', body: 'new body' } }
         question.reload
-        expect(question.best_answer_id).to eq answer.id
-      end
 
-      it "render to updated question's asnwers" do
-        expect(response).to render_template :update_best_answer
-      end
-    end
-
-    context 'user is not author' do
-      let!(:not_author) { create(:user) }
-
-      before do
-        sign_in(not_author)
-        patch :update_best_answer, params: { id: question, question: { best_answer_id: answer.id } }, format: :js
-      end
-
-      it 'changes question to updated question' do
-        question.reload
-        expect(question.best_answer_id).not_to eq answer.id
+        expect(question.title).to eq question.title
+        expect(question.body).to eq question.body
       end
     end
   end
