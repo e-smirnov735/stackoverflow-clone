@@ -1,9 +1,9 @@
 require 'rails_helper'
 
 RSpec.describe AnswersController, type: :controller do
-  let(:question) { create(:question) }
-  let(:answer) { create(:answer, question:) }
   let(:user) { create(:user) }
+  let(:question) { create(:question, user:) }
+  let!(:answer) { create(:answer, question:, user:) }
 
   describe 'GET #show' do
     before { get :show, params: { question_id: question, id: answer } }
@@ -89,9 +89,9 @@ RSpec.describe AnswersController, type: :controller do
     before { login(user) }
 
     let!(:question) { create(:question, user:) }
-    let!(:answer) { create(:answer, question:) }
+    let!(:answer) { create(:answer, question:, user:) }
 
-    it 'deletes the question' do
+    it 'deletes the answer' do
       expect { delete :destroy, params: { id: answer }, format: :js }.to change(Answer, :count).by(-1)
     end
 
@@ -100,9 +100,21 @@ RSpec.describe AnswersController, type: :controller do
 
       expect(response).to render_template :destroy
     end
+
+    context 'user is not autor' do
+      let!(:not_author) { create(:user) }
+
+      before { login(not_author) }
+
+      it 'user tries delete another answer' do
+        expect { delete :destroy, params: { id: answer }, format: :js }.not_to change(Answer, :count)
+      end
+    end
   end
 
   describe 'PATCH #update' do
+    before { login(user) }
+
     context 'with valid attributes' do
       it 'changes answer attributes' do
         patch :update, params: { id: answer, answer: { body: 'new body' } }, format: :js
@@ -126,6 +138,48 @@ RSpec.describe AnswersController, type: :controller do
       it 'renders update view' do
         patch :update, params: { id: answer, answer: attributes_for(:answer, :invalid) }, format: :js
         expect(response).to render_template :update
+      end
+    end
+
+    context 'user is not autor' do
+      let!(:not_author) { create(:user) }
+
+      before { login(not_author) }
+
+      it 'does not change answer attributes' do
+        patch :update, params: { id: answer, answer: { body: 'new body' } }, format: :js
+        answer.reload
+        expect(answer.body).not_to eq 'new body'
+      end
+    end
+  end
+
+  describe 'PATCH #update_favorite' do
+    context 'user is author for current question question' do
+      before { login(user) }
+
+      it 'change best answer' do
+        patch :update_favorite, params: { id: answer }, format: :js
+        answer.reload
+        expect(answer.best).to eq true
+      end
+
+      it 'other questions is no best' do
+        patch :update_favorite, params: { id: answer }, format: :js
+        answer.reload
+        expect(answer.question.answers.where(best: true).count).to eq 1
+      end
+    end
+
+    context 'user is not author for current question' do
+      let!(:not_author) { create(:user) }
+
+      before { login(not_author) }
+
+      it 'not changes best answer' do
+        expect do
+          patch :update, params: { id: answer }, format: :js
+        end.not_to change(answer, :best)
       end
     end
   end

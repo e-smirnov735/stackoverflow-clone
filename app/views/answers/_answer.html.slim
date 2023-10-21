@@ -1,8 +1,8 @@
 - if answer.persisted?
   .answer id="answerId-#{answer.id}"
     p = answer.body
-    - if @question.best_answer_id == answer.id
-      .favorite "like"
+    - if answer.best
+      .favorite like
     div[class= "answer-errors-#{answer&.id}"]
     .answer_form
       = form_with model: answer, class: 'hidden', html: {id: "edit-answer-#{answer.id}"}, local: false do |f|
@@ -13,10 +13,9 @@
         = f.submit 'Save'
 
     .answer_actions
-      - if answer.user_id.eql?(current_user&.id)
+      - if answer.author?(current_user)
         = link_to 'Edit', '#', class: 'edit-answer-link', data: {answer_id: answer.id}
         = button_to 'Delete Answer', answer_path(answer), remote: true, method: :delete
-      - if @question.user_id.eql?(current_user&.id)
-         = button_to 'Set best', update_best_answer_question_path(@question),
-            remote: true, method: :patch,
-            params: { question:  { best_answer_id: answer.id } }
+      - if answer.question.user_id.eql?(current_user&.id)
+         = button_to 'Set best',  update_favorite_answer_path(answer),
+            remote: true, method: :patch, class: "best-answer-btn"
