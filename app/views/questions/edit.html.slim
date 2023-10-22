@@ -8,4 +8,7 @@ h2 Edit question
     = f.label :body
     = f.text_area :body
     br
+    = f.label :files
+    = f.file_field :files, multiple: true
+    br
     = f.submit 'Save'
