@@ -8,4 +8,6 @@ Rails.application.routes.draw do
   end
 
   root to: 'questions#index'
+
+  delete 'attachments/:id/purge', to: 'attachments#purge', as: 'purge_attachment'
 end
