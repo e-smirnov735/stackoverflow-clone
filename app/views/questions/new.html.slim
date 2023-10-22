@@ -9,4 +9,7 @@ h3 Ask a public question
     = f.label :body
     = f.text_area :body, class: 'form-control'
   br
+    = f.label :files
+    = f.file_field :files, multiple: true
+  br
   = f.submit 'Ask', class: 'btn btn-primary'
