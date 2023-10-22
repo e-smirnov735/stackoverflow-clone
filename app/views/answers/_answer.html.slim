@@ -3,6 +3,11 @@
     p = answer.body
     - if answer.best
       .favorite like
+    - if answer.files.attached?
+    p
+      - answer.files.each do |file|
+        p = link_to file.filename.to_s, url_for(file)
+
     div[class= "answer-errors-#{answer&.id}"]
     .answer_form
       = form_with model: answer, class: 'hidden', html: {id: "edit-answer-#{answer.id}"}, local: false do |f|
