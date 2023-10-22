@@ -46,6 +46,20 @@ I'd like to be able to edit my question
       expect(page).to have_content "Body can't be blank"
       expect(page).to have_content "Title can't be blank"
     end
+
+    it 'edits his question with add files' do
+      click_on 'Edit'
+
+      fill_in 'Body', with: 'edit body'
+      fill_in 'Title', with: 'edit text'
+
+      attach_file 'File', ["#{Rails.root}/spec/rails_helper.rb", "#{Rails.root}/spec/spec_helper.rb"]
+
+      click_on 'Save'
+
+      expect(page).to have_link 'rails_helper.rb'
+      expect(page).to have_link 'spec_helper.rb'
+    end
   end
 
   describe "trie edit other user's question" do
