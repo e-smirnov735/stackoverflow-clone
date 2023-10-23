@@ -22,6 +22,10 @@ gem 'rubocop'
 
 gem 'slim-rails'
 
+gem 'aws-sdk-s3', require: false
+
+gem 'dotenv-rails'
+
 gem 'devise'
 # Use Redis adapter to run Action Cable in production
 # gem 'redis', '~> 4.0'

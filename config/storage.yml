@@ -6,6 +6,14 @@ local:
   service: Disk
   root: <%= Rails.root.join("storage") %>
 
+yandex:
+  service: S3
+  access_key_id: <%= ENV["YA_CLOUD_ACCESS_KEY"] %>
+  secret_access_key: <%= ENV["YA_CLOUD_SECRET_KEY"] %>
+  bucket: <%= ENV["YA_CLOUD_BUCKET_NAME"] %>
+  region: ru-central1
+  endpoint: <%= ENV["YA_CLOUD_END_POINT"] %>
+  force_path_style: true
 # Use rails credentials:edit to set the AWS secrets (as aws:access_key_id|secret_access_key)
 # amazon:
 #   service: S3
